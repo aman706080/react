@@ -6,12 +6,13 @@ jobs:
       - image: cimg/node:23.10.0  
     steps:
       - checkout  
-      - run:
-          name: Install Dependencies
-          command: npm install  
-      - run:
-          name: Build the React App
-          command: npm start
+      - run: docker build .
+      - run: docker run -p 3000:3000 
+      #     name: Install Dependencies
+      #     command: npm install  
+      # - run:
+      #     name: Build the React App
+      #     command: npm start
             
       
       
