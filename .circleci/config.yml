@@ -14,6 +14,12 @@ jobs:
       - run:
           name: Run Development Server
           command: npm run build
+      - run:
+          command: |
+            npm install -g serve  # Install 'serve' package globally
+            serve -s build -l 5000 &  # Serve the build on port 5000 in the background
+            sleep 10  # Allow the server to start (you can add additional steps to test)
+            curl http://localhost:5000
   # Start the development server
 workflows:
   version: 2
