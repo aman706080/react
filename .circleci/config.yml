@@ -9,9 +9,7 @@ jobs:
       - run:
           name: Check Node Version
           command: node --version  # Verify that Node.js is installed correctly
-      - run:
-          name: Install Dependencies
-          command: npm install  # Install all project dependencies
+        # Install all project dependencies
       - run:
           name: Run Development Server
           command: npm start  # Start the development server
