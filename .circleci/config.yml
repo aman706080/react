@@ -11,7 +11,8 @@ jobs:
           command: npm install  
       - run:
           name: Build the React App
-          command: npm run build  
+          command: npm start
+            
       
       
 workflows:
