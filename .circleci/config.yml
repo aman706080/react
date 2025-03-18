@@ -10,9 +10,11 @@ jobs:
           name: Check Node Version
           command: node --version  # Verify that Node.js is installed correctly
         # Install all project dependencies
+      - run: npm install
       - run:
           name: Run Development Server
-          command: npm start  # Start the development server
+          command: npm run build
+  # Start the development server
 workflows:
   version: 2
   build:
