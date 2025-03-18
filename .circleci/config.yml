@@ -1,26 +1,24 @@
-version: 2.1
-
 jobs:
   build:
     docker:
-      - image: cimg/node:23.10.0  # Using the Node.js image for your app
+      - image: cimg/node:23.10.0
     steps:
-      - checkout  # Check out your source code
+      - checkout
       - run:
-          name: Check Node Version
-          command: node --version  # Verify that Node.js is installed correctly
-        # Install all project dependencies
-      - run: npm install
+          name: Install Dependencies
+          command: npm install
       - run:
-          name: Run Development Server
+          name: Install Serve Globally
+          command: npm install -g serve --unsafe-perm=true
+      - run:
+          name: Build the React App
           command: npm run build
       - run:
+          name: Serve the Build
           command: |
-            npm install -g serve  # Install 'serve' package globally
-            serve -s build -l 5000 &  # Serve the build on port 5000 in the background
-            sleep 10  # Allow the server to start (you can add additional steps to test)
-            curl http://localhost:5000
-  # Start the development server
+            serve -s build -l 5000 &
+            sleep 10  # Allow the server to start
+            curl http://localhost:5000  # Check if the server is running
 workflows:
   version: 2
   build:
