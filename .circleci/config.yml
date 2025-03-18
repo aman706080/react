@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: cimg/node:23.10.0  # Use the Node.js Docker image
+      - image: cimg/node:23.10.0  # Use the Node.js ocker image
     services:
       - docker  # Enable Docker service to access the Docker daemon
     steps:
