@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: node:23.10.0-alpine  # Alpine-based Node.js Docker image
+      - image: alpine:latest  # Alpine-based Node.js Docker image
     services:
       - docker:  # Enable Docker service for Docker-in-Docker support
     steps:
