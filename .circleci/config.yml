@@ -1,7 +1,22 @@
+version: 2.1
+
 jobs:
   build:
     docker:
-      - image: cimg/node:23.10.0
+      - image: cimg/node:23.10.0  
     steps:
-      - checkout
-      - run: node --version
+      - checkout  
+      - run:
+          name: Install Dependencies
+          command: npm install  
+      - run:
+          name: Build the React App
+          command: npm start
+            
+      
+      
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build
