@@ -1,9 +1,22 @@
+version: 2.1
+
 jobs:
   build:
     docker:
-      - image: cimg/node:23.10.0
+      - image: cimg/node:23.10.0  # Using the Node.js image for your app
     steps:
-      - checkout
-      - run: node --version
-      - run: npm install
-      - run: npm start
+      - checkout  # Check out your source code
+      - run:
+          name: Check Node Version
+          command: node --version  # Verify that Node.js is installed correctly
+      - run:
+          name: Install Dependencies
+          command: npm install  # Install all project dependencies
+      - run:
+          name: Run Development Server
+          command: npm start  # Start the development server
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build
