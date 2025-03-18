@@ -1,24 +1,23 @@
 jobs:
   build:
     docker:
-      - image: cimg/node:23.10.0
+      - image: cimg/node:23.10.0  # Node.js Docker image
     steps:
-      - checkout
+      - checkout  # Checkout the code
       - run:
           name: Install Dependencies
-          command: npm install
-      - run:
-          name: Install Serve Globally
-          command: npm install -g serve --unsafe-perm=true
+          command: npm install  # Install project dependencies
       - run:
           name: Build the React App
-          command: npm run build
+          command: npm run build  # Build the production-ready app
       - run:
-          name: Serve the Build
+          name: Serve the Build Using npx (Locally)
+          command: npx serve -s build -l 5000 &  # Use npx to run serve locally
+      - run:
+          name: Check if the Server is Running
           command: |
-            serve -s build -l 5000 &
             sleep 10  # Allow the server to start
-            curl http://localhost:5000  # Check if the server is running
+            curl http://localhost:5000  # Check if the server is accessible
 workflows:
   version: 2
   build:
