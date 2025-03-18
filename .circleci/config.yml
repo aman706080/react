@@ -3,25 +3,18 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: cimg/node:23.10.0  # Use the Node.js ocker image
+      - image: cimg/node:23.10.0  # Base image for Node.js environment
     services:
-      - docker  # Enable Docker service to access the Docker daemon
+      - docker:  # Enable Docker service for Docker-in-Docker support
     steps:
-      - checkout  # Checkout the repository
+      - checkout  # Checkout the code from your repository
       
-      # Install Docker CLI inside the container if needed
-      - run:
-          name: Install Docker CLI
-          command: |
-            curl -fsSL https://get.docker.com -o get-docker.sh
-            sudo sh get-docker.sh
-      
-      # Build Docker image
+      # Set up Docker inside the container and run the Docker commands
       - run:
           name: Build Docker image
-          command: docker build -t react-app .  # Build Docker image with tag 'react-app'
+          command: docker build -t react-app .  # Build Docker image with the 'react-app' tag
           
-      # Run the Docker container
+      # Run the container from the built image
       - run:
           name: Run Docker container
           command: docker run -d -p 3000:3000 react-app  # Run in detached mode with port mapping
