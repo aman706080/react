@@ -1,3 +1,5 @@
+version: 2.1
+
 jobs:
   build:
     docker:
@@ -11,13 +13,16 @@ jobs:
           name: Build the React App
           command: npm run build  # Build the production-ready app
       - run:
-          name: Serve the Build Using npx (Locally)
-          command: npx serve -s build -l 5000 &  # Use npx to run serve locally
+          name: Install Serve Locally
+          command: npm install --save-dev serve  # Install serve as a dev dependency
       - run:
-          name: Check if the Server is Running
+          name: Serve the Build Using npx (Locally)
+          command: npx serve -s build -l 5000 &  # Use npx to run serve locally in the background
+      - run:
+          name: Wait and Test the Server
           command: |
             sleep 10  # Allow the server to start
-            curl http://localhost:5000  # Check if the server is accessible
+            curl http://localhost:5000  # Test if the server is running
 workflows:
   version: 2
   build:
