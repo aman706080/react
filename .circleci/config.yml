@@ -12,7 +12,8 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - build/  # Persist the build directory instead of individual files
+            # - build/
+            - src/  # Persist the build directory instead of individual files
 
   deploy:
     docker:
@@ -33,7 +34,7 @@ jobs:
       - run:
           name: Deploy to S3
           command: |
-            aws s3 sync /workspace/build/ s3://amankattusajhedar/ --delete
+            aws s3 sync /workspace/src/ s3://amankattusajhedar/ --delete
 
 workflows:
   version: 2
