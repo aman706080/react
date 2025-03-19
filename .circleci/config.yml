@@ -1,36 +1,39 @@
 version: 2.1
 
-executors:
-  node-executor:
-    docker:
-      - image: cimg/node:23.10.0
-    working_directory: ~/repo
-
 jobs:
   build:
-    executor: node-executor
+    docker:
+      - image: cimg/node:23.10.0
     steps:
       - checkout
-      - run:
-          name: Install Dependencies
-          command: npm install
-      - run:
-          name: Build the React App
-          command: npm run build  # Use 'npm run build' instead of 'npm start'
-          
+      - run: npm install
+      - run: npm test
+      - run: npm run build  # Make sure to build the app here for production
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build/  # Persist the build directory instead of individual files
+
   deploy:
     docker:
-      - image: circleci/python:3.8  # We use the Python image because `awscli` is easier to install in Python-based images
+      - image: amazon/aws-cli
     steps:
+      - run:
+          name: Install tar
+          command: yum install -y tar gzip
       - checkout
+      - attach_workspace:
+          at: /workspace
       - run:
-          name: Install AWS CLI
+          name: Configure AWS Credentials
           command: |
-            pip install awscli
+            aws configure set aws_access_key_id $jammu
+            aws configure set aws_secret_access_key $kammu
+            # aws configure set region $AWS_REGION  # Ensure the region is set
       - run:
-          name: Deploy to AWS S3
+          name: Deploy to S3
           command: |
-            aws s3 sync ./build/ s3://amankattusajhedar/ --delete --region $AWS_REGION
+            aws s3 sync /workspace/build/ s3://amankattusajhedar/ --delete
 
 workflows:
   version: 2
