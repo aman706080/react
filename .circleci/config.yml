@@ -1,32 +1,42 @@
 version: 2.1
 
+executors:
+  node-executor:
+    docker:
+      - image: cimg/node:23.10.0
+    working_directory: ~/repo
+
 jobs:
   build:
-    docker:
-      - image: alpine:latest  # Alpine-based Node.js Docker image
-    services:
-      - docker:  # Enable Docker service for Docker-in-Docker support
+    executor: node-executor
     steps:
-      - checkout  # Checkout the code from your repository
-
-      # Install Docker in the Alpine image
+      - checkout
       - run:
-          name: Install Docker
+          name: Install Dependencies
+          command: npm install
+      - run:
+          name: Build the React App
+          command: npm run build  # Use 'npm run build' instead of 'npm start'
+          
+  deploy:
+    docker:
+      - image: circleci/python:3.8  # We use the Python image because `awscli` is easier to install in Python-based images
+    steps:
+      - checkout
+      - run:
+          name: Install AWS CLI
           command: |
-            apk add --no-cache docker  # Install Docker inside the Alpine container
-
-      # Build the Docker image
+            pip install awscli
       - run:
-          name: Build Docker image
-          command: docker build -t react-app .  # Build Docker image with the 'react-app' tag
-
-      # Run the Docker container
-      - run:
-          name: Run Docker container
-          command: docker run -d -p 3000:3000 react-app  # Run in detached mode with port mapping
+          name: Deploy to AWS S3
+          command: |
+            aws s3 sync ./build/ s3://amankattusajhedar/ --delete --region $AWS_REGION
 
 workflows:
   version: 2
-  build:
+  build_and_deploy:
     jobs:
       - build
+      - deploy:
+          requires:
+            - build
