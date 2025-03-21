@@ -1,0 +1,5 @@
+name: greeting
+on: push
+jobs:
+    greet:
+        run-on:
